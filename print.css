@@ -1,0 +1,7 @@
+@page { size: 80mm auto; margin: 6mm; }
+body { background:#fff !important; }
+header, footer, .tabs, .card, main > :not(#relatorio) { display:none !important; }
+#relatorio { display:block !important; }
+#receipt { display:block !important; }
+#receipt .receipt { width:auto; }
+

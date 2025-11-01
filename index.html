@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Controle de Estoque - Distribuidora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="styles.css" rel="stylesheet">
+  <link href="print.css" rel="stylesheet" media="print">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="app-header">
+    <div class="branding">
+      <h1>Distribuidora - Controle de Estoque</h1>
+      <div class="date" id="today"></div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Seções">
+      <button class="tab active" data-tab="produtos" aria-selected="true">Produtos</button>
+      <button class="tab" data-tab="conferencia" aria-selected="false">Conferência</button>
+      <button class="tab" data-tab="relatorio" aria-selected="false">Relatório</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Produtos -->
+    <section id="produtos" class="tab-panel active" role="tabpanel">
+      <form id="product-form" class="card">
+        <h2>Novo Produto</h2>
+        <div class="grid">
+          <label>
+            Nome
+            <input type="text" id="pName" required placeholder="Ex.: Água Mineral 500ml">
+          </label>
+          <label>
+            Estoque Padrão (máximo ideal)
+            <input type="number" id="pMax" required min="0" step="1" placeholder="Ex.: 120">
+          </label>
+          <label>
+            Categoria
+            <select id="pCategory" required>
+              <option value="" disabled selected>Selecione</option>
+              <option>Água Mineral</option>
+              <option>Cachaça</option>
+              <option>Cerveja</option>
+              <option>Energético</option>
+              <option>Refrigerante</option>
+              <option>Suco</option>
+              <option>Vodka</option>
+              <option>Whisky</option>
+              <option>Vinho</option>
+            </select>
+          </label>
+        </div>
+        <div class="actions">
+          <button type="submit" class="primary">Cadastrar</button>
+          <button type="reset" class="ghost">Limpar</button>
+        </div>
+      </form>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>Lista de Produtos</h2>
+          <div class="row">
+            <input type="search" id="searchProducts" placeholder="Buscar por nome">
+            <select id="filterCategory" aria-label="Filtrar por categoria">
+              <option value="">Todas as categorias</option>
+              <option>Água Mineral</option>
+              <option>Cachaça</option>
+              <option>Cerveja</option>
+              <option>Energético</option>
+              <option>Refrigerante</option>
+              <option>Suco</option>
+              <option>Vodka</option>
+              <option>Whisky</option>
+              <option>Vinho</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th><span class="full">Estoque Padrão</span><span class="abbr">Est.</span></th>
+                <th><span class="full">Última Contagem</span><span class="abbr">C.E.</span></th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="productsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conferência -->
+    <section id="conferencia" class="tab-panel" role="tabpanel" aria-hidden="true">
+      <div class="card">
+        <div class="card-header">
+          <h2>Conferência de Estoque</h2>
+          <div class="row">
+            <input type="search" id="searchCount" placeholder="Buscar produto">
+            <input type="text" id="orderOwner" placeholder="Nome do colaborador">
+            <button id="saveAllCounts" class="primary">Salvar Contagens</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Padrão</th>
+                <th>Real</th>
+                <th>Pedido</th>
+              </tr>
+            </thead>
+            <tbody id="countTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Relatório -->
+    <section id="relatorio" class="tab-panel" role="tabpanel" aria-hidden="true">
+      <div class="card">
+        <div class="card-header">
+          <h2>Relatório de Pedidos</h2>
+          <div class="row">
+            <button id="refreshReport" class="ghost">Atualizar</button>
+            <button id="printReport" class="primary">Imprimir (80mm)</button>
+            <button id="copyReport" class="ghost">Copiar Texto</button>
+            <a id="waShare" class="ghost" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+          </div>
+        </div>
+        <div id="reportOwnerLine" class="muted"></div>
+        <div id="reportEmpty" class="muted">Sem itens para repor. Faça uma conferência ou ajuste os produtos.</div>
+        <div id="reportList" class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Real</th>
+                <th>A comprar</th>
+              </tr>
+            </thead>
+            <tbody id="reportTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Área de recibo para impressão 80mm -->
+      <section id="receipt" aria-hidden="true">
+        <div class="receipt">
+          <div class="receipt-header">
+            <div class="store-name" id="receiptStore">Distribuidora</div>
+            <div class="receipt-date" id="receiptDate"></div>
+            <div class="receipt-owner" id="receiptOwner"></div>
+            <div class="divider"></div>
+          </div>
+          <div class="receipt-body" id="receiptBody"></div>
+          <div class="divider"></div>
+          <div class="receipt-footer" id="receiptFooter">Gerado automaticamente</div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <span id="summary"></span>
+    <button id="backupBtn" class="ghost small">Backup</button>
+    <input id="restoreFile" type="file" accept="application/json" hidden>
+    <button id="restoreBtn" class="ghost small">Restaurar</button>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
